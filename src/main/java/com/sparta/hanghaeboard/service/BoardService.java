@@ -5,12 +5,12 @@ import com.sparta.hanghaeboard.dto.BoardResponseDto;
 import com.sparta.hanghaeboard.entity.Board;
 import com.sparta.hanghaeboard.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,9 @@ public class BoardService {
 
 
     @Transactional(readOnly = true)
+
     public List<BoardResponseDto> getListBoards() {
+
         List<Board> boardList =  boardRepository.findAllByOrderByModifiedAtDesc();
         List<BoardResponseDto> boardResponseDto = new ArrayList<>();
 
@@ -44,39 +46,40 @@ public class BoardService {
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
+
         return new BoardResponseDto(board);
     }
 
-
     @Transactional
-    public Long updateBoard(Long id, BoardRequestDto requestDto) {
+    public BoardResponseDto update(Long id, BoardRequestDto requestDto) {
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
+        System.out.println(requestDto.getPassword());
+        System.out.println(board.getPassword());
 
-        if (requestDto.getPassword().equals(board.getPassword())) {
+
+        if (board.getPassword().equals(requestDto.getPassword())) {
             board.update(requestDto);
-            return board.getId();
+            return new BoardResponseDto(board);
+
         } else {
-            return board.getId();
+            return new BoardResponseDto("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value());
         }
     }
-
 
     @Transactional
-    public Map<String, Object> deleteBoard(Long id, BoardRequestDto requestDto) {
+    public BoardResponseDto deleteBoard (Long id, String password) {
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
-        Map<String, Object> response = new HashMap<>();
-        if (requestDto.getPassword().equals(board.getPassword())) {
+        System.out.println("board password= " + board.getPassword());
+        System.out.println("password = " + password);
+
+        if(board.getPassword().equals(password))
             boardRepository.deleteById(id);
-            response.put("success",true);
-            return response;
-        } else {
-            response.put("success", false);
-            return response;
+
+        return new BoardResponseDto("게시글을 삭제했습니다.", HttpStatus.OK.value());
         }
     }
 
-}
