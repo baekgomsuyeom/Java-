@@ -6,13 +6,13 @@ import com.sparta.hanghaeboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Map;ㅇㅇㅇㅇㅇㅇㅇㅇㅇ
 
 @RestController
 @RequiredArgsConstructor
 
 public class BoardController {
 
+    //BoardService 와 연결
     private final BoardService boardService;
 
     //게시글 작성
@@ -35,13 +35,14 @@ public class BoardController {
 
     //선택한 게시글 수정(변경)
     @PutMapping("/board/{id}")
-    public Long updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
-        return boardService.updateBoard(id, requestDto);
+    public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
+        return boardService.update(id, requestDto);
     }
 
     //선택한 게시글 삭제
-    @DeleteMapping("/board/{id}")
-    public Map<String,Object> deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
-        return boardService.deleteBoard(id, requestDto);
+    @DeleteMapping("/board/{id}/{password}")
+    public BoardResponseDto deleteBoard(@PathVariable Long id, @PathVariable String password) {
+        System.out.println("password controller = " + password);
+        return boardService.deleteBoard(id, password);
     }
 }
