@@ -1,4 +1,3 @@
-
 package com.sparta.hanghaeboard.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class Board extends Timestamped {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,11 +36,10 @@ public class Board extends Timestamped {
         this.password = requestDto.getPassword();
     }
 
-    //선택한 게시글 수정(변경)
-    public void update(BoardRequestDto boardResponseDto) {
-        this.title = boardResponseDto.getTitle();
-        this.username = boardResponseDto.getUsername();
-        this.contents = boardResponseDto.getContents();
-        this.password = boardResponseDto.getPassword();
+    public void update(BoardRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.username = requestDto.getUsername();
+        this.contents = requestDto.getContents();
+        this.password = requestDto.getPassword();
     }
 }
