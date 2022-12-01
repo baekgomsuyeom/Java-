@@ -6,7 +6,7 @@ import com.sparta.hanghaeboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Map;
+import java.util.Map;ㅇㅇㅇㅇㅇㅇㅇㅇㅇ
 
 @RestController
 @RequiredArgsConstructor
